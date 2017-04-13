@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .red{
+            background:red;
+            color:#fff;
+        }
+        .green{
+            background:green;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li @click="showInForm(item)" v-for="item in list" :class="{red:item.gender==0,green:item.gender==1}">
+                <div>id:{{item.id}}</div>
+                <div>name:{{item.name}}</div>
+                <div>age:{{item.age}}</div>
+                <!--<div>gender:{{item.gender}}</div>-->
+                <div v-if="item.gender==0">male</div>
+                <div v-else>female</div>
+                <div>hobby:{{item.hobby.join(",")}}</div>
+                <div>salary:{{item.salary}}</div>
+                <div v-html="item.motto"></div>
+            </li>
+        </ul>
+
+        <!--表单-->
+        <form action="">
+            <div>id:{{nowitem.id}}</div>
+            <div>name: <input type="text" v-model="nowitem.name"></div>
+            <div>age: <input type="text" v-model="nowitem.age"></div>
+            <div>
+                male: <input type="radio" value="0" v-model="nowitem.gender">
+                female: <input type="radio" value="1" v-model="nowitem.gender">
+            </div>
+            <div>
+                eat: <input type="checkbox" value="eat" v-model="nowitem.hobby">
+                sleep: <input type="checkbox" value="sleep" v-model="nowitem.hobby">
+                play games: <input type="checkbox" value="play games" v-model="nowitem.hobby">
+                watch mv: <input type="checkbox" value="watch mv" v-model="nowitem.hobby">
+                football: <input type="checkbox" value="football" v-model="nowitem.hobby">
+                sing: <input type="checkbox" value="sing" v-model="nowitem.hobby">
+                dance: <input type="checkbox" value="dance" v-model="nowitem.hobby">
+                piano: <input type="checkbox" value="piano" v-model="nowitem.hobby">
+            </div>
+            <!--添加提交表单数据按钮，阻止点击事件的默认行为，因为要模拟ajax提交-->
+            <button @click.prevent="sub">submit</button>
+        </form>
+    </div>
+</body>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script>
+    var list = [{
+        id: '001',
+        name: 'jack',
+        age: 18,
+        gender: 0,
+        hobby: ['eat', 'sleep', 'play games'],
+        salary: 666,
+        motto: '<div>you are my sunshine</div>'
+      },
+      {
+        id: '002',
+        name: 'rose',
+        age: 16,
+        gender: 1,
+        hobby: ['sing', 'dance', 'piano'],
+        salary: 888,
+        motto: '<div>my heart will go on</div>'
+      }
+    ];
+    var app=new Vue({
+        el:"#app",
+        data:{
+            list,
+            nowitem:{}//nowitem是要在表单中呈现的数据
+        },
+        methods:{
+            showInForm:function(item){
+                this.nowitem=item;
+            },
+            //提交数据（模拟ajax提交，不刷新页面）
+            sub:function(){
+                localStorage.setItem("test",JSON.stringify(this.list));
+            }
+        }
+    });
+</script>
+</html>
